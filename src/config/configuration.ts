@@ -1,4 +1,4 @@
-import { Transactions, Merchants, Users, Cards } from 'src/db/models';
+import { ExternalEntity, ExternalEntityMovement } from 'src/db/models';
 import { ConfigHelper } from 'src/helper/helper.controller';
 import { IDatabaseConfig } from 'src/interfaces/dbconfig';
 
@@ -9,6 +9,5 @@ export class ExtTransactionsDB implements IDatabaseConfig {
   username = this.configHelper.getDatabaseUser();
   password = this.configHelper.getDatabasePassword();
   database = this.configHelper.getDatabaseName();
-  
-  models = [Transactions, Merchants, Users, Cards];
+  models = [ExternalEntity, ExternalEntityMovement];
 }
