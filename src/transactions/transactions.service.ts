@@ -4,6 +4,9 @@ import { UpdateTransactionDto } from './dto/update-transaction.dto';
 
 @Injectable()
 export class TransactionsService {
+  login(){
+    
+  }
   create(createTransactionDto: CreateTransactionDto) {
     return 'This action adds a new transaction';
   }

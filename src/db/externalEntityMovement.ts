@@ -3,7 +3,6 @@ import {
   Column,
   Model,
   Table,
-  DataType,
 } from 'sequelize-typescript';
 
 @Table
@@ -12,7 +11,7 @@ export class ExternalEntityMovement extends Model {
   @Column
   id: number;
   @Column
-  externalEntityId: string;
+  externalEntityCode: string;
   @Column
   transactionNumber: string;
   @Column
