@@ -1,12 +1,5 @@
-import {ExternalEntity} from "./externalEntity"
-import {ExternalEntityMovement} from "./externalEntityMovement"
+import { ExternalEntity } from './externalEntity';
+import { ExternalEntityMovement } from './externalEntityMovement';
+import { ExternalTransaction } from './externalTransactions';
 
-
-
-
-
-
-export {
-  ExternalEntity,
-  ExternalEntityMovement,
-}
+export { ExternalEntity, ExternalEntityMovement, ExternalTransaction };

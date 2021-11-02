@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
 import { IHelper } from './helper.service';
-import { ConfigHelper } from './helper.controller';
+import { ConfigHelper } from './confighelper.service';
 
 @Module({
-  controllers: [ConfigHelper],
-  providers: [IHelper]
+  providers: [IHelper, ConfigHelper],
+  exports: [IHelper, ConfigHelper],
 })
 export class HelperModule {}

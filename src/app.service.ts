@@ -1,14 +1,28 @@
 import { Injectable } from '@nestjs/common';
-import { ConfigHelper } from './helper/helper.controller';
-import { TransactionsController } from './transactions/transactions.controller';
+import { encript } from './encrypt';
+import { JeevesTransactionsGetter } from './transactions/jeevesTransactions.service';
 
 @Injectable()
 export class AppService {
-  constructor(private helper: ConfigHelper, private transactionGetter: TransactionsController){}
-  getHello(): string {
-    return 'Hello World!';
+  constructor(private jeeves: JeevesTransactionsGetter
+    ) {}
+
+  async processJeeves() {
+    encript("Wirsolut.1")
+
+    let jeeves: any = await this.jeeves.login();
+    if (jeeves) {
+      let transactions = await this.jeeves.getTransactions(
+        jeeves.lastTransactionDate?jeeves.lastTransactionDate.toISOString() : '',
+        new Date().toISOString(),
+      );
+      return transactions;
+    } else {
+      return 'login failed';
+    }
   }
-  process(){
-    
+
+  getHello(): string {
+    return "I'm on point!";
   }
 }

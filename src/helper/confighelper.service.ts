@@ -1,0 +1,64 @@
+import { Injectable } from '@nestjs/common';
+import { IHelper } from './helper.service';
+
+@Injectable()
+export class ConfigHelper {
+  constructor(private helperService: IHelper) {}
+  getDatabaseUser() {
+    return this.helperService.getConfigValue('DATABASE_USER');
+  }
+  getDatabasePort() {
+    return this.helperService.getConfigValue('DATABASE_PORT');
+  }
+  getDatabaseHost() {
+    return this.helperService.getConfigValue('DATABASE_HOST');
+  }
+  getDatabaseName() {
+    return this.helperService.getConfigValue('DATABASE_NAME');
+  }
+  getDatabasePassword() {
+    return this.helperService.getConfigValue('DATABASE_PASSWORD');
+  }
+  getSPDatabaseUser() {
+    return this.helperService.getConfigValue('SP_DATABASE_USER');
+  }
+  getSPDatabaseHost() {
+    return this.helperService.getConfigValue('SP_DATABASE_HOST');
+  }
+  getSPDatabasePassword() {
+    return this.helperService.getConfigValue('SP_DATABASE_PASSWORD');
+  }
+  getSPDatabaseName() {
+    return this.helperService.getConfigValue('SP_DATABASE_NAME');
+  }
+  getJeevesKey(){
+    return this.helperService.getConfigValue("JEEVES_KEY")
+  }
+  getMailSender(){
+    return this.helperService.getConfigValue("MAIL_SENDER")
+  }
+  getMailReceiver(){
+    return this.helperService.getConfigValue("MAIL_RECEIVER")
+  }
+  getMailHost(){
+    return this.helperService.getConfigValue("MAIL_HOST")
+  }
+  getMailPort(){
+    return this.helperService.getConfigValue("MAIL_PORT")
+  }
+  getMailAuthPw(){
+    return this.helperService.getConfigValue("MAIL_AUTH_PW")
+  }
+  getJeevesLoginUrl(){
+    return this.helperService.getConfigValue("JEEVES_LOGIN_URL")
+  }
+  getJeevesLoginUser(){
+    return this.helperService.getConfigValue("JEEVES_LOGIN_USER")
+  }
+  getJeevesLoginPassword(){
+    return this.helperService.getConfigValue("JEEVES_LOGIN_PW")
+  }
+  getJeevesTransactionsUrl(){
+    return this.helperService.getConfigValue("JEEVES_TXS_GET_URL")
+  }
+}

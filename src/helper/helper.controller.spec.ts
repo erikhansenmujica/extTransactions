@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { ConfigHelper } from './helper.controller';
+import { ConfigHelper } from './confighelper.service';
 import { IHelper } from './helper.service';
 
 describe('ConfigHelper', () => {
@@ -19,19 +19,19 @@ describe('ConfigHelper', () => {
   });
   it('getDatabaseHost should be defined', () => {
     expect(controller.getDatabaseHost).toBeDefined();
-    expect(typeof controller.getDatabaseHost()).toBe('string');
+    expect(typeof controller.getDatabaseHost).toBe('string');
   });
   it('getDatabaseName should be defined', () => {
     expect(controller.getDatabaseName).toBeDefined();
-    expect(typeof controller.getDatabaseName()).toBe('string');
+    expect(typeof controller.getDatabaseName).toBe('string');
   });
   it('getDatabasePassword should be defined', () => {
     expect(controller.getDatabasePassword).toBeDefined();
-    expect(typeof controller.getDatabasePassword()).toBe('string');
+    expect(typeof controller.getDatabasePassword).toBe('string');
   });
   it('getDatabasePort should be defined', () => {
     expect(controller.getDatabasePort).toBeDefined();
-    expect(typeof controller.getDatabasePort()).toBe('string');
+    expect(typeof controller.getDatabasePort).toBe('string');
   });
   it('getDatabaseUser should be defined', () => {
     expect(controller.getDatabaseUser).toBeDefined();
