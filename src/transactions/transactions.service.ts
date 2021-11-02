@@ -7,7 +7,7 @@ import { lastValueFrom } from 'rxjs';
 import { AxiosResponse } from 'axios';
 import sequelize from 'sequelize';
 import { Cache } from 'cache-manager';
-import { ConfigHelper } from 'src/helper/confighelper.service.js';
+import { ConfigHelper } from '../helper/confighelper.service.js';
 const Op = sequelize.Op;
 @Injectable()
 export class ITransactionGetter {
