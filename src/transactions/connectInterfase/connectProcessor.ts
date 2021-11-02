@@ -3,6 +3,7 @@ import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import { InjectConnection, InjectModel } from '@nestjs/sequelize';
 import { lastValueFrom } from 'rxjs';
+import { ConfigHelper } from 'src/helper/confighelper.service';
 import { MailService } from 'src/mail/mail.service';
 import { IConnectInterfase } from './connectInterfase.service';
 @Injectable()
@@ -11,6 +12,7 @@ export class ConectProcessor {
     private service: IConnectInterfase,
     private httpService: HttpService,
     private mailing: MailService,
+    private helper: ConfigHelper
   ) {}
   async processTransactions(internalTransactions: any, entity: any) {
     const rates = await lastValueFrom(
@@ -26,6 +28,7 @@ export class ConectProcessor {
           tx.Status = 'Error';
           this.mailing.sendErrorMail(
             'Master account not fount: ' + JSON.stringify(tx),
+            'Error with transaction',this.helper.getMailReceiver()
           );
         } else if (val === 2) {
           tx.Status = 'NoEncontrada';
@@ -36,6 +39,7 @@ export class ConectProcessor {
         } else if (val === -1) {
           this.mailing.sendErrorMail(
             'Conversión inválida: ' + JSON.stringify(tx),
+            'Error with transaction',this.helper.getMailReceiver()
           );
         }
 

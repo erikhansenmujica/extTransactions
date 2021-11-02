@@ -1,7 +1,6 @@
 import { Get, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { createDecipheriv, randomBytes, scrypt } from 'crypto';
-import { promisify } from 'util';
+import { createDecipheriv, randomBytes, scrypt, scryptSync } from 'crypto';
 
 @Injectable()
 export class IHelper {
@@ -10,16 +9,14 @@ export class IHelper {
   getConfigValue(value: string) {
     return this.configService.get<string>(value);
   }
-  async getProtectedValue(value: string) {
-    const iv = randomBytes(16);
-    const password = 'Password used to generate key';
-    const key = (await promisify(scrypt)(password, 'salt', 32)) as string;
-    const decipher = createDecipheriv('aes-256-ctr', key, iv);
-    const decryptedText = Buffer.concat([
-      decipher.update(this.configService.get<NodeJS.ArrayBufferView>(value)),
-      decipher.final(),
-    ]);
-    console.log(decryptedText)
-    return decryptedText.toString();
+  getProtectedValue(value: string) {
+    const encryptedText = this.configService.get<string>(value);
+    const password = 'Jeeves';
+    const iv2 = Buffer.alloc(16, 0);
+    const key2 = scryptSync(password, 'salt', 32);
+    const decipher = createDecipheriv('aes-256-ctr', key2, iv2);
+    let decryptedText = decipher.update(encryptedText, 'hex', 'utf8');
+    decryptedText += decipher.final('utf8');
+    return decryptedText;
   }
 }

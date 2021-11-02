@@ -8,8 +8,6 @@ export class AppService {
     ) {}
 
   async processJeeves() {
-    encript("Wirsolut.1")
-
     let jeeves: any = await this.jeeves.login();
     if (jeeves) {
       let transactions = await this.jeeves.getTransactions(

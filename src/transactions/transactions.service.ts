@@ -8,6 +8,8 @@ import { AxiosResponse } from 'axios';
 import sequelize from 'sequelize';
 import { Cache } from 'cache-manager';
 import { ConfigHelper } from '../helper/confighelper.service.js';
+import { MailService } from '../mail/mail.service.js';
+import { IHelper } from '../helper/helper.service.js';
 const Op = sequelize.Op;
 @Injectable()
 export class ITransactionGetter {
@@ -18,7 +20,9 @@ export class ITransactionGetter {
     private extEntityMovements: typeof ExternalEntityMovement,
     private httpService: HttpService,
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
-    private helper: ConfigHelper
+    private helper: ConfigHelper,
+    private mails: MailService,
+    private ihelper: IHelper,
   ) {}
   async getIp(): Promise<AxiosResponse<JSON>> {
     await this.createEntity('Jeeves');
@@ -38,8 +42,28 @@ export class ITransactionGetter {
           source: 3,
         }),
       );
-      if (login.data && login.data.data)
+      if (login.data && login.data.data) {
+        const availableSpent = parseFloat(
+          login.data.data.company.availableSpent,
+        );
+        this.helper.alerts().limits.forEach((limit) => {
+          console.log(availableSpent, limit, entity.extraData.previousLimit);
+          if (availableSpent <= limit && entity.extraData.previousLimit > limit) {
+            this.mails.sendErrorMail(
+              this.helper.alerts().message,
+              'Limit exceeded',
+              this.helper.getMailReceiverForLimitExceeded(),
+            );
+            entity.extraData = {
+              ...entity.extraData,
+              previousLimit: availableSpent,
+            };
+            entity.save();
+            return;
+          }
+        });
         await this.cacheManager.set('token', login.data.data.secretToken);
+      }
     }
     return entity;
   }
@@ -84,7 +108,11 @@ export class ITransactionGetter {
         res = this.extEntityMovements.findAll({
           where: {
             externalEntityCode: service,
-            [Op.or]: [{ Status: 'Confirmada' }, { Status: 'Error' }, {Status:"NoEncontrada"}],
+            [Op.or]: [
+              { Status: 'Confirmada' },
+              { Status: 'Error' },
+              { Status: 'NoEncontrada' },
+            ],
           },
         });
         return res;
@@ -118,6 +146,7 @@ export class ITransactionGetter {
         masterAccountCode: 'string',
         userName: 'ari',
         source: 3,
+        extraData: { previousLimit: 10000000 },
       },
     });
     return service;

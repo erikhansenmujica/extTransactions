@@ -9,12 +9,12 @@ export class MailService {
     private helper: ConfigHelper,
   ) {}
 
-  public sendErrorMail(error: string): void {
+  public sendErrorMail(error: string, subject:string, mailReceiver:string): void {
     this.mailerService
       .sendMail({
-        to: this.helper.getMailReceiver(), // list of receivers
+        to: mailReceiver, // list of receivers
         from: this.helper.getMailSender(), // sender address
-        subject: 'Error with transaction', // Subject line
+        subject: subject, // Subject line
         text: error, // plaintext body
         html: `<b>${error}</b>`, // HTML body content
       })

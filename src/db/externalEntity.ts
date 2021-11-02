@@ -3,6 +3,7 @@ import {
   Column,
   Model,
   Table,
+  DataType,
   HasMany,
 } from 'sequelize-typescript';
 import { ExternalEntityMovement } from './externalEntityMovement';
@@ -18,6 +19,8 @@ export class ExternalEntity extends Model {
   userName: string;
   @Column
   source: number;
+  @Column({ type: DataType.JSON })
+  extraData: { previousLimit: number };
   @Column
   lastTransactionDate: Date;
   @HasMany(() => ExternalEntityMovement)

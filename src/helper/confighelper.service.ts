@@ -17,7 +17,7 @@ export class ConfigHelper {
     return this.helperService.getConfigValue('DATABASE_NAME');
   }
   getDatabasePassword() {
-    return this.helperService.getConfigValue('DATABASE_PASSWORD');
+    return this.helperService.getProtectedValue('DATABASE_PASSWORD');
   }
   getSPDatabaseUser() {
     return this.helperService.getConfigValue('SP_DATABASE_USER');
@@ -26,39 +26,48 @@ export class ConfigHelper {
     return this.helperService.getConfigValue('SP_DATABASE_HOST');
   }
   getSPDatabasePassword() {
-    return this.helperService.getConfigValue('SP_DATABASE_PASSWORD');
+    return this.helperService.getProtectedValue('SP_DATABASE_PASSWORD');
   }
   getSPDatabaseName() {
     return this.helperService.getConfigValue('SP_DATABASE_NAME');
   }
-  getJeevesKey(){
-    return this.helperService.getConfigValue("JEEVES_KEY")
+  getJeevesKey() {
+    return this.helperService.getConfigValue('JEEVES_KEY');
   }
-  getMailSender(){
-    return this.helperService.getConfigValue("MAIL_SENDER")
+  getMailSender() {
+    return this.helperService.getConfigValue('MAIL_SENDER');
   }
-  getMailReceiver(){
-    return this.helperService.getConfigValue("MAIL_RECEIVER")
+  getMailReceiver() {
+    return this.helperService.getConfigValue('MAIL_RECEIVER');
   }
-  getMailHost(){
-    return this.helperService.getConfigValue("MAIL_HOST")
+  getMailReceiverForLimitExceeded() {
+    return this.helperService.getConfigValue('MAIL_RECEIVER_FOR_LIMIT_EXCEEDED');
   }
-  getMailPort(){
-    return this.helperService.getConfigValue("MAIL_PORT")
+  getMailHost() {
+    return this.helperService.getConfigValue('MAIL_HOST');
   }
-  getMailAuthPw(){
-    return this.helperService.getConfigValue("MAIL_AUTH_PW")
+  getMailPort() {
+    return this.helperService.getConfigValue('MAIL_PORT');
   }
-  getJeevesLoginUrl(){
-    return this.helperService.getConfigValue("JEEVES_LOGIN_URL")
+  getMailAuthPw() {
+    return this.helperService.getProtectedValue('MAIL_AUTH_PW');
   }
-  getJeevesLoginUser(){
-    return this.helperService.getConfigValue("JEEVES_LOGIN_USER")
+  getJeevesLoginUrl() {
+    return this.helperService.getConfigValue('JEEVES_LOGIN_URL');
   }
-  getJeevesLoginPassword(){
-    return this.helperService.getConfigValue("JEEVES_LOGIN_PW")
+  getJeevesLoginUser() {
+    return this.helperService.getConfigValue('JEEVES_LOGIN_USER');
   }
-  getJeevesTransactionsUrl(){
-    return this.helperService.getConfigValue("JEEVES_TXS_GET_URL")
+  getJeevesLoginPassword() {
+    return this.helperService.getProtectedValue('JEEVES_LOGIN_PW');
+  }
+  getJeevesTransactionsUrl() {
+    return this.helperService.getConfigValue('JEEVES_TXS_GET_URL');
+  }
+  alerts() {
+    return {
+      limits: [2000, 1500, 1000],
+      message: 'Se ha pasado el limite de Jeeves de USD %1. Limite actual %2',
+    };
   }
 }
