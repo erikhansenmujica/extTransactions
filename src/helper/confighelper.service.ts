@@ -64,10 +64,10 @@ export class ConfigHelper {
   getJeevesTransactionsUrl() {
     return this.helperService.getConfigValue('JEEVES_TXS_GET_URL');
   }
-  alerts() {
+  alerts(limit, actual) {
     return {
       limits: [2000, 1500, 1000],
-      message: 'Se ha pasado el limite de Jeeves de USD %1. Limite actual %2',
+      message: `Se ha pasado el limite de Jeeves de USD ${limit}. Limite actual ${actual}`,
     };
   }
 }

@@ -46,11 +46,12 @@ export class ITransactionGetter {
         const availableSpent = parseFloat(
           login.data.data.company.availableSpent,
         );
-        this.helper.alerts().limits.forEach((limit) => {
+        this.helper.alerts("","").limits.forEach((limit) => {
           console.log(availableSpent, limit, entity.extraData.previousLimit);
+          console.log(this.helper.alerts(limit, availableSpent).message)
           if (availableSpent <= limit && entity.extraData.previousLimit > limit) {
             this.mails.sendErrorMail(
-              this.helper.alerts().message,
+              this.helper.alerts(limit, availableSpent).message,
               'Limit exceeded',
               this.helper.getMailReceiverForLimitExceeded(),
             );
@@ -146,7 +147,6 @@ export class ITransactionGetter {
         masterAccountCode: 'string',
         userName: 'ari',
         source: 3,
-        extraData: { previousLimit: 10000000 },
       },
     });
     return service;
