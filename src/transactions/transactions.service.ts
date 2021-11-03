@@ -46,10 +46,13 @@ export class ITransactionGetter {
         const availableSpent = parseFloat(
           login.data.data.company.availableSpent,
         );
-        this.helper.alerts("","").limits.forEach((limit) => {
+        this.helper.alerts('', '').limits.forEach((limit) => {
           console.log(availableSpent, limit, entity.extraData.previousLimit);
-          console.log(this.helper.alerts(limit, availableSpent).message)
-          if (availableSpent <= limit && entity.extraData.previousLimit > limit) {
+          console.log(this.helper.alerts(limit, availableSpent).message);
+          if (
+            availableSpent <= limit &&
+            entity.extraData.previousLimit > limit
+          ) {
             this.mails.sendErrorMail(
               this.helper.alerts(limit, availableSpent).message,
               'Limit exceeded',
@@ -141,14 +144,18 @@ export class ITransactionGetter {
     return res;
   }
   async createEntity(service: string) {
-    await this.extEntity.findOrCreate({
-      where: {
-        code: service,
-        masterAccountCode: 'string',
-        userName: 'ari',
-        source: 3,
-      },
-    });
+    const entity = await this.extEntity.findByPk(service);
+    if (!entity)
+      await this.extEntity.create({
+          code: service,
+          masterAccountCode: 'string',
+          userName: 'ari',
+          source: 3,
+          extraData: {
+            previousLimit: 100000,
+          },
+      });
+      console.log("entity: ", entity)
     return service;
   }
   async getEntity(service: string) {
