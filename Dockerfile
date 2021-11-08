@@ -1,5 +1,5 @@
 
-FROM node:12.19.0-alpine3.9
+FROM node:12.19.0-alpine3.9 as production
 
 ARG NODE_ENV=production
 ENV NODE_ENV=${NODE_ENV}
@@ -10,12 +10,12 @@ COPY package*.json ./
 
 RUN npm install glob rimraf
 
-RUN npm install
+RUN npm install -g @nestjs/cli
 
-COPY . .
+RUN npm install
 
 RUN npm run build
 
-COPY /usr/src/app/dist ./dist
+COPY . .
 
 CMD ["node", "dist/main"]
