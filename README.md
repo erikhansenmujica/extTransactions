@@ -26,11 +26,26 @@
 
 ## Installation
 
+-with docker:
+
 docker-compose build
+
+-with npm:
+(in order to get the app running with npm you must install postgresql and create a database called "external-transactions")
+
+npm install
+
+npm run build
 
 ## Start app
 
+-with docker:
+
 docker-compose up
+
+-with npm:
+
+npm run start:prod
 
 ## License
 
