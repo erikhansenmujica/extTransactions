@@ -40,8 +40,13 @@ export class ConfigHelper {
   getMailReceiver() {
     return this.helperService.getConfigValue('MAIL_RECEIVER');
   }
+  getAppErrorMailReceiver() {
+    return this.helperService.getConfigValue('MAIL_APP_ERROR_RECEIVER');
+  }
   getMailReceiverForLimitExceeded() {
-    return this.helperService.getConfigValue('MAIL_RECEIVER_FOR_LIMIT_EXCEEDED');
+    return this.helperService.getConfigValue(
+      'MAIL_RECEIVER_FOR_LIMIT_EXCEEDED',
+    );
   }
   getMailHost() {
     return this.helperService.getConfigValue('MAIL_HOST');

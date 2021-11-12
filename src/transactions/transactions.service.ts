@@ -112,11 +112,7 @@ export class ITransactionGetter {
         res = this.extEntityMovements.findAll({
           where: {
             externalEntityCode: service,
-            [Op.or]: [
-              { Status: 'Confirmada' },
-              { Status: 'Error' },
-              { Status: 'NoEncontrada' },
-            ],
+            [Op.or]: [{ Status: 'Confirmada' }, { Status: 'Error' }],
           },
         });
         return res;
@@ -147,15 +143,15 @@ export class ITransactionGetter {
     const entity = await this.extEntity.findByPk(service);
     if (!entity)
       await this.extEntity.create({
-          code: service,
-          masterAccountCode: 'string',
-          userName: 'ari',
-          source: 3,
-          extraData: {
-            previousLimit: 100000,
-          },
+        code: service,
+        masterAccountCode: 'string',
+        userName: 'ari',
+        source: 3,
+        extraData: {
+          previousLimit: 100000,
+        },
       });
-      console.log("entity: ", entity)
+    console.log('entity: ', entity);
     return service;
   }
   async getEntity(service: string) {

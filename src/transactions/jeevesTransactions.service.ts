@@ -1,4 +1,6 @@
 import { Injectable } from '@nestjs/common';
+import { ConfigHelper } from 'src/helper/confighelper.service';
+import { MailService } from 'src/mail/mail.service';
 import { ConectProcessor } from './connectInterfase/connectProcessor';
 import { JeevesProcessor } from './processors/jeevesProcessor';
 import { ITransactionGetter } from './transactions.service';
@@ -8,7 +10,9 @@ export class JeevesTransactionsGetter {
   constructor(
     private service: ITransactionGetter,
     private processor: JeevesProcessor,
-    private connectProcessor: ConectProcessor
+    private connectProcessor: ConectProcessor,
+    private mailing: MailService,
+    private helper: ConfigHelper,
   ) {}
 
   async login() {
@@ -71,17 +75,26 @@ export class JeevesTransactionsGetter {
         );
       });
       await this.logout();
-      await this.service.updateLastTransaction('Jeeves', lasttx[0]);
+      if (lasttx[0])
+        await this.service.updateLastTransaction('Jeeves', lasttx[0]);
       const confirmedAndErrorTxs = await this.service.getTransactions(
         '',
         '',
         'Jeeves',
         true,
       );
-      const entity=await this.service.getEntity("Jeeves")
-      await this.connectProcessor.processTransactions(confirmedAndErrorTxs, entity);
+      const entity = await this.service.getEntity('Jeeves');
+      await this.connectProcessor.processTransactions(
+        confirmedAndErrorTxs,
+        entity,
+      );
       return { message: 'Done' };
     } catch (error) {
+      this.mailing.sendErrorMail(
+        'Error ' + error + ' in server',
+        'Error with transaction',
+        this.helper.getAppErrorMailReceiver(),
+      );
       console.log(error);
       return error;
     }

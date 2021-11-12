@@ -9,24 +9,28 @@ export class IConnectInterfase {
     private sequelize: Sequelize,
     private helper: ConfigHelper,
   ) {}
-  async processTransaction(data: any, entity:any) {
+  async processTransaction(data: any, entity: any) {
     const [results, meta] = await this.sequelize.query(
-      `DECLARE @return_value int EXEC @return_value = [dbo].[ExternalTransaction] @masterAccountCode="${
-      data.externalEntityCode
-    }",@masterAccountKey="${this.helper.getJeevesKey()}",@accountReferenceNumber="${
-        data.accountReferenceNumber
-      }",@number="${data.transactionNumber}",@originalAmount=${
-        data.originalCurrencyAmount
-      },@originalCurrencyCode="${data.originalCurrency}",@convertedAmount=${
-        data.TargetCurrencyAmount
-      },@convertedRate=${
-        data.OriginalToTargetExchangeRate
-      },@convertedCurrencyCode="${data.TargetCurrency}",@description="${
-        data.Description
-      }",@source=${entity.source},@status=${1},@date="${
-        data.ConfirmedDateTime?data.ConfirmedDateTime.toISOString():""
-      }",@extraData="${data.FullData}" SELECT 'Return Value' = @return_value
+      `DECLARE @return_value int EXEC @return_value = [dbo].[ExternalTransaction] @masterAccountCode=?,@masterAccountKey=?,@accountReferenceNumber=?,@number=?,@originalAmount=?,@originalCurrencyCode=?,@convertedAmount=?,@convertedRate=?,@convertedCurrencyCode=?,@description=?,@source=?,@status=?,@date=?,@extraData=? SELECT 'Return Value' = @return_value
      `,
+      {
+        replacements: [
+          data.externalEntityCode,
+          this.helper.getJeevesKey(),
+          data.accountReferenceNumber,
+          data.transactionNumber,
+          data.originalCurrencyAmount,
+          data.originalCurrency,
+          data.TargetCurrencyAmount,
+          data.OriginalToTargetExchangeRate,
+          data.TargetCurrency,
+          data.Description,
+          entity.source,
+          1,
+          data.ConfirmedDateTime ? data.ConfirmedDateTime.toISOString() : '',
+          JSON.stringify(data.FullData),
+        ],
+      },
     );
     return results[0]['Return Value'];
   }

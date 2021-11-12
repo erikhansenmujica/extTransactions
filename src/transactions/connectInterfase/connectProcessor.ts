@@ -12,7 +12,7 @@ export class ConectProcessor {
     private service: IConnectInterfase,
     private httpService: HttpService,
     private mailing: MailService,
-    private helper: ConfigHelper
+    private helper: ConfigHelper,
   ) {}
   async processTransactions(internalTransactions: any, entity: any) {
     const rates = await lastValueFrom(
@@ -22,24 +22,64 @@ export class ConectProcessor {
     );
     if (internalTransactions.length)
       for await (const tx of internalTransactions) {
-        tx.rates = rates;
+        tx.FullData.rates = rates.data.rates;
         let val = await this.service.processTransaction(tx, entity);
-        if (val === 1) {
-          tx.Status = 'Error';
+        let errorMessage = '';
+        const FUNDS_EXCEEDED = -2;
+        const INVALID_CONVERSION = -1;
+        const PROCESSED_OK = 0;
+        const MASTER_ACCOUNT_NOT_FOUND = 1;
+        const ACCOUNT_NOT_FOUND = 2;
+        const ACCOUNT_MOVEMENT_NUMBER_DUPLICATE_FOR_DATE = 3;
+        switch (val) {
+          case MASTER_ACCOUNT_NOT_FOUND:
+            tx.Status = 'Error';
+            errorMessage = 'Mater account no encontrada';
+            break;
+          case ACCOUNT_NOT_FOUND:
+            tx.Status = 'NoEncontrada';
+            break;
+          case ACCOUNT_MOVEMENT_NUMBER_DUPLICATE_FOR_DATE:
+            tx.Status = tx.Status == 'Pendiente' ? 'Error' : 'Procesada';
+            errorMessage = 'Movimiento duplicado';
+            break;
+          case INVALID_CONVERSION:
+            tx.Status = 'ErrorNegocio';
+            errorMessage = 'Conversi��n inv��lida';
+            break;
+          case FUNDS_EXCEEDED:
+            tx.Status = 'Procesada';
+            errorMessage = 'Saldo insuficiente (procesada igualmente)';
+            this.mailing.sendErrorMail(
+              'Error ' +
+                errorMessage +
+                ' funds exceeded: ' +
+                JSON.stringify(tx),
+              'Error with transaction',
+              this.helper.getMailReceiverForLimitExceeded(),
+            );
+            break;
+          default:
+            tx.Status = 'Procesada';
+            break;
+        }
+        if (tx.Status == 'Error') {
           this.mailing.sendErrorMail(
-            'Master account not fount: ' + JSON.stringify(tx),
-            'Error with transaction',this.helper.getMailReceiver()
+            'Error ' +
+              errorMessage +
+              ' processing transaction: ' +
+              JSON.stringify(tx),
+            'Error with transaction',
+            this.helper.getMailReceiver(),
           );
-        } else if (val === 2) {
-          tx.Status = 'NoEncontrada';
-        } else if (val === 3) {
-          tx.Status = 'Procesada';
-        } else if (val === 0) {
-          tx.Status = 'Procesada';
-        } else if (val === -1) {
+        } else if (tx.Status == 'ErrorNegocio') {
           this.mailing.sendErrorMail(
-            'Conversión inválida: ' + JSON.stringify(tx),
-            'Error with transaction',this.helper.getMailReceiver()
+            'Error ' +
+              errorMessage +
+              ' processing transaction: ' +
+              JSON.stringify(tx),
+            'Error with transaction',
+            this.helper.getMailReceiverForLimitExceeded(),
           );
         }
 
