@@ -396,3 +396,4 @@ Temporary Items
 # Local
 dist
 postgres_data
+.env

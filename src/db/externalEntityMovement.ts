@@ -6,7 +6,8 @@ import {
   AutoIncrement,
   ForeignKey,
   BelongsTo,
-  DataType,NotNull,
+  DataType,
+  NotNull,
   Default,
 } from 'sequelize-typescript';
 import { ExternalEntity } from './externalEntity';
@@ -21,7 +22,7 @@ export class ExternalEntityMovement extends Model {
   @Column
   externalEntityCode: string;
   @Column
-  transactionNumber: number;
+  transactionNumber: string;
   @Column
   transactionDateTime: Date;
   @Column

@@ -56,7 +56,7 @@ export class JeevesProcessor {
     if (!txs.length) {
       await this.extEntityMovements.create({
         externalEntityCode: 'Jeeves',
-        transactionNumber: tx.id,
+        transactionNumber: 'JV-' + tx.id,
         transactionDateTime: tx.transactionDateTime,
         accountReferenceNumber:
           tx.user && tx.user.firstName.trim() + '/' + tx.user.lastName.trim(),
