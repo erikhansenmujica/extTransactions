@@ -52,6 +52,7 @@ import { config } from 'process';
           synchronize: true,
           autoLoadModels: true,
           force: false,
+          alter: true,
         };
       },
     }),
