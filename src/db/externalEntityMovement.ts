@@ -29,14 +29,14 @@ export class ExternalEntityMovement extends Model {
   accountReferenceNumber: string;
   @Column
   originalCurrency: string;
-  @Column
-  originalCurrencyAmount: string;
+  @Column({ type: DataType.DECIMAL(30, 8) })
+  originalCurrencyAmount: number;
   @Column
   TargetCurrency: string;
-  @Column
-  TargetCurrencyAmount: string;
-  @Column
-  OriginalToTargetExchangeRate: string;
+  @Column({ type: DataType.DECIMAL(30, 8) })
+  TargetCurrencyAmount: number;
+  @Column({ type: DataType.DECIMAL(18, 8) })
+  OriginalToTargetExchangeRate: number;
   @Column
   Description: string;
   @Column
@@ -54,3 +54,5 @@ export class ExternalEntityMovement extends Model {
   @BelongsTo(() => ExternalEntity)
   externalEntity: ExternalEntity;
 }
+
+

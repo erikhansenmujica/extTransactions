@@ -48,10 +48,9 @@ export class ITransactionGetter {
         );
         this.helper.alerts('', '').limits.forEach((limit) => {
           console.log(availableSpent, limit, entity.extraData.previousLimit);
-          console.log(this.helper.alerts(limit, availableSpent).message);
           if (
-            availableSpent <= limit &&
-            entity.extraData.previousLimit > limit
+            availableSpent >= limit &&
+            entity.extraData.previousLimit < limit
           ) {
             this.mails.sendErrorMail(
               this.helper.alerts(limit, availableSpent).message,
