@@ -26,7 +26,7 @@ import { MailService } from 'src/mail/mail.service';
     IConnectInterfase,
     ConfigHelper,
     IHelper,
-    MailService
+    MailService,
   ],
   exports: [ITransactionGetter, JeevesTransactionsGetter],
 })

@@ -47,10 +47,14 @@ export class ITransactionGetter {
           login.data.data.company.availableSpent,
         );
         this.helper.alerts('', '').limits.forEach((limit) => {
-          console.log(availableSpent, limit, entity.extraData.previousLimit);
+          console.log(
+            availableSpent,
+            parseInt(limit),
+            entity.extraData.previousLimit,
+          );
           if (
-            availableSpent >= limit &&
-            entity.extraData.previousLimit < limit
+            availableSpent <= parseInt(limit) &&
+            entity.extraData.previousLimit > parseInt(limit)
           ) {
             this.mails.sendErrorMail(
               this.helper.alerts(limit, availableSpent).message,
@@ -65,6 +69,11 @@ export class ITransactionGetter {
             return;
           }
         });
+        entity.extraData = {
+          ...entity.extraData,
+          previousLimit: availableSpent,
+        };
+        entity.save();
         await this.cacheManager.set('token', login.data.data.secretToken);
       }
     }

@@ -71,7 +71,7 @@ export class ConfigHelper {
   }
   alerts(limit, actual) {
     return {
-      limits: [2000, 1500, 1000],
+      limits: this.helperService.getConfigValue('LIMITS').split(','),
       message: `Se ha pasado el limite de Jeeves de USD ${limit}. Limite actual ${actual}`,
     };
   }
